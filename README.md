@@ -4,7 +4,7 @@
 
 `cex` is a cross-platform library for working with data in CITE Exchange format.
 
-## Current version: 1.0
+## Current version: 2.0
 
 
 Status:  **early development**. [Release notes](releases.md)

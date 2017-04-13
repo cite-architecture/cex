@@ -13,9 +13,9 @@ class CexParserSpec extends FlatSpec {
 
 #!cexversion
 1.0.0
-#!citerepo
+#!citelibrary
 name#demo
-version#2017.1
+urn#urn:cite2:cex:testdata.2017_1:parsertest
 license#CC Share Alike.  For details, see more info.
 #!ctscatalog
 urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
@@ -37,15 +37,27 @@ urn:cts:citedemo:arabic.quran.v1:2.2#ذَلِكَ الْكِتَابُ لَا ر
     val expectedBlocks = 4
     assert(cex.blocks.size == expectedBlocks)
 
-    assert(cex.blocks("cexversion") == "1.0.0")
+    assert(cex.block("cexversion") == Some("1.0.0"))
 
-    val expectedCatalog = """urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
-urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true"""
-    assert (cex.blocks("ctscatalog") == expectedCatalog)
+    val expectedCatalog = Some("""urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
+urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true""")
+    assert (cex.block("ctscatalog") == expectedCatalog)
   }
 
-  it should "verify that all block labels are valid" in pending
-
+  it should "verify that all block labels are valid" in {
+    val badLabel = """# This is a small CEX string.
+# It uses an invalid label.
+#!bogus
+1.0.0
+"""
+    try {
+      val cex = CexParser(badLabel)
+      fail("Should have generated assertion error.")
+    } catch {
+      case err: java.lang.AssertionError => assert(true)
+      case _ : Throwable => fail("Should have generated assertion error.")
+    }
+  }
 
 
 

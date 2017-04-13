@@ -32,9 +32,18 @@ urn:cts:citedemo:arabic.quran.v1:2.1#بِسْمِ اللَّهِ الرَّحْ�
 urn:cts:citedemo:arabic.quran.v1:2.2#ذَلِكَ الْكِتَابُ لَا رَيْبَ فِيهِ هُدًى لِلْمُتَّقِينَ
 """
 
-  "A CexParser" should "do things" in {
+  "A CexParser" should "parse its source into a map of labelled blocks" in {
     val cex = CexParser(tinyCex)
+    val expectedBlocks = 4
+    assert(cex.blocks.size == expectedBlocks)
+
+    assert(cex.blocks("cexversion") == "1.0.0")
+
+    val expectedCatalog = """urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
+urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true"""
+    assert (cex.blocks("ctscatalog") == expectedCatalog)
   }
+
 
 
 

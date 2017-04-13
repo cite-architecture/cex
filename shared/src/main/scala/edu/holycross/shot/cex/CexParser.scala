@@ -6,28 +6,21 @@ import js.annotation.JSExport
 
 @JSExport case class CexParser (rawCex: String) {
 
-  val sections = rawCex.split("#!").filter(_.nonEmpty).filter(_.startsWith("#"))
+  /** Array of labelled blocks of CEX strings. */
+  val rawBlocks = rawCex.split("#!")
 
-  val blockLabels = sections.map(_.split("\n")(0))
-
-  def hasBlock(label: String): Boolean = {
-    blockLabels.indexOf(label) match {
-      case -1 => false
-      case _ => true
-    }
+  /** Each block of data as an array of non-empty, non-comment lines. */
+  val tidyBlocks = for (b <- rawBlocks if b.split("\n").size > 1) yield {
+    val lns = b.split("\n")
+    lns.filter(_.nonEmpty).filterNot(_.startsWith("#"))
   }
 
-  def block(label: String) : Option[String] = {
-    if (hasBlock(label)) {
-      val labelledBlock = sections(blockLabels.indexOf(label))
-      // drop label
-      Some(labelledBlock.split("\n").drop(1).mkString("\n"))
-    } else {
-      None
+  /** Map of block labels to data. */
+  def blocks: Map[String,String] = {
+    val tupleArray = for (lns <- tidyBlocks if lns.size > 1) yield {
+      (lns(0) -> lns.drop(1).mkString("\n"))
     }
+    tupleArray.toMap
   }
-
-
-
 
 }

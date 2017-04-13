@@ -4,6 +4,11 @@ import scala.scalajs.js
 import js.annotation.JSExport
 
 
+/** A CEX parser making blocks of a CEX String available
+* as a named map of label -> data.
+*
+* @param rawCex CEX data to parse.
+*/
 @JSExport case class CexParser (rawCex: String) {
 
   /** Array of labelled blocks of CEX strings. */

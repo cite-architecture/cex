@@ -44,6 +44,8 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
     assert (cex.blocks("ctscatalog") == expectedCatalog)
   }
 
+  it should "verify that all block labels are valid" in pending
+
 
 
 

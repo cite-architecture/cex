@@ -41,7 +41,6 @@ import scala.collection.mutable.Map
 
   /** Each block of data as a vector of non-empty, non-comment lines. */
   def blocksContent: Vector[Vector[String]] = {
-    //Vector[String]()
     val content = for (b <- rawBlocks if b.split("\n").size > 1) yield {
       val lns = b.split("\n").toVector
       lns.filterNot(_.startsWith("#"))
@@ -54,10 +53,11 @@ import scala.collection.mutable.Map
   /** Map of block labels to one or more data sets. */
   def blockMap : scala.collection.immutable.Map[String,Vector[String]] = {
     val blocksToContent = scala.collection.mutable.Map[String, Vector[String]]()
-
+    
     for (lns <- blocksContent if lns.size > 1) {
       if (blocksToContent.keySet.contains(lns(0))) {
         val v = blocksToContent(lns(0)) :+ lns.drop(1).mkString("\n")
+        blocksToContent(lns(0)) = v
 
       } else {
         val s = lns.drop(1).mkString("\n")
@@ -85,6 +85,7 @@ import scala.collection.mutable.Map
     }
   }
 
-  assert ( labels.union(blocks) == labels, "Inavlid block label in " + blocks)
+
+  require ( labels.union(blocks) == labels, "Invalid block label in " + blocks)
 
 }

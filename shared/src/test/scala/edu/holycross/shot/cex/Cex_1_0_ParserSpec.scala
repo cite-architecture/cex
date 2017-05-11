@@ -86,8 +86,11 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
       val cex = CexParser(badLabel)
       fail("Should have generated assertion error.")
     } catch {
-      case err: java.lang.AssertionError => assert(true)
-      case _ : Throwable => fail("Should have generated assertion error.")
+      case err: IllegalArgumentException =>  {
+        assert(err.getMessage() == "requirement failed: Invalid block label in Set(bogus)")
+      }
+
+      case thr : Throwable => fail("Should have generated illegal argument error: " + thr)
     }
   }
 
@@ -100,9 +103,30 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
     assert (noBlock == v)
   }
 
-  it should "accept multiple citedata blocks in a single CEX source" in pending
+  it should "require that citedata blocks be accompanied by a citecatalog block" in {
+    val citedata = """#!citedata
+#Venetus A images
+URN#Caption#Rights
+urn:cite2:hmt:vaimg:img1#Folio 1 recto, natural light#public domain
+urn:cite2:hmt:vaimg:img1a#Folio 1 recto, detail in UV light#public domain
 
-  it should "require that citedata blocks be accompanied by a citecatalog block" in pending
+#!citedata
+#Upsilon 1.1 images
+URN#Caption#Rights
+urn:cite2:hmt:e3eimg:img1#Folio 1 recto, natural light#public domain
+urn:cite2:hmt:e3eimg:img2#Folio 1 verso, natural light#public domain
+
+"""
+    val cex = CexParser(citedata)
+    val citedatablocks = cex.block("citedata")
+
+    assert(citedatablocks.size == 2)
+
+
+  }
+
+  it should "accept multiple citedata blocks in a single CEX source" in  pending
+
 
 
 

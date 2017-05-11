@@ -64,10 +64,13 @@ urn:cts:citedemo:arabic.quran.v1:1.2#الْحَمْدُ لِلَّهِ رَبّ�
     assert(withversion.version == Some("1.0.0"))
   }
 
-/*
-    val expectedCatalog = Some("""urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
-urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true""")
-    assert (cex.block("ctscatalog") == expectedCatalog)
+  it should "recognize a ctscatalog block" in {
+    val expectedCatalog = """urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
+urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true"""
+
+    val cex = CexParser(tinyCex)
+    assert (cex.block("ctscatalog").size == 1)
+    assert (cex.block("ctscatalog")(0) == expectedCatalog)
   }
 
   it should "verify that all block labels are valid" in {
@@ -85,18 +88,18 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
       case err: java.lang.AssertionError => assert(true)
       case _ : Throwable => fail("Should have generated assertion error.")
     }
-    */
+  }
 
 
 
-  it should "report None when asked for a non-existent block" in {
+  it should "report None when asked for a non-existent block" in pending /*{
     val cex = CexParser(tinyCex)
     val noBlock = cex.block("boguslabel")
     noBlock match {
       case None => assert(true)
       case _ => fail("Should have received a None option")
     }
-  }
+  } */
 
   it should "accept multiple citedata blocks in a single CEX source" in pending
 

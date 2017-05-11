@@ -17,12 +17,10 @@ import scala.collection.mutable.Map
   * reported for this source.
   */
   def version: Option[String] = {
-    block("cexversion") match {
-      case None => None
-      case v: Option[Vector[String]] => {
-        require(v.size == 1, "Multiple cexversion blocks not allowed: found " + v.size)
-        Some(v.get(0))
-      }
+    block("cexversion").size match {
+      case 0 => None
+      case 1 =>   Some(    block("cexversion")(0))
+      case n: Int => throw new Exception("Only one cexversion block allowed: found " + n)
     }
   }
 
@@ -30,19 +28,13 @@ import scala.collection.mutable.Map
   * reported for this source, or a null string if None.
   */
   def versionString : String = {
-    block("cexversion") match {
-      case None => ""
-      case v: Option[Vector[String]] => {
-        require(v.size == 1, "Multiple cexversion blocks not allowed: found " + v.size)
-        v.get(0)
-      }
+    block("cexversion").size match {
+      case 0 => ""
+      case 1 => block("cexversion")(0)
+      case n: Int =>  throw new Exception("Only one cexversion block allowed: found " + n)
     }
-    /*
-        val versionBlocks = cex.block("cexversion").get
-        assert (versionBlocks.size == 1)
-        assert(versionBlocks(0) == "1.0.0")
-        */
   }
+
 
   /** Vector of labelled blocks of CEX strings. */
   def rawBlocks = rawCex.split("#!").filter(_.nonEmpty).toVector
@@ -85,11 +77,11 @@ import scala.collection.mutable.Map
 
   /** Find content for block label.
   */
-  def block(blockLabel: String) = { //: Option(Vector[String]) = {
+  def block(blockLabel: String) : Vector[String] = {
     if (blocks.contains(blockLabel)) {
-      Some(blockMap(blockLabel))
+      blockMap(blockLabel)
     } else {
-      None
+      Vector[String]()
     }
   }
 

@@ -51,7 +51,19 @@ urn:cts:citedemo:arabic.quran.v1:1.2#الْحَمْدُ لِلَّهِ رَبّ�
     val cex = CexParser(noVersion)
     assert (cex.versionString == "")
   }
-    //assert(cex.block("cexversion") == Some()
+
+  it should "supply an Option[String] for version" in {
+    val noVersion = """#!ctsdata
+urn:cts:citedemo:arabic.quran.v1:1.1#بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+urn:cts:citedemo:arabic.quran.v1:1.2#الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ
+"""
+    val versionless = CexParser(noVersion)
+    assert(versionless.version == None)
+
+    val withversion = CexParser(tinyCex)
+    assert(withversion.version == Some("1.0.0"))
+  }
+
 /*
     val expectedCatalog = Some("""urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
 urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true""")

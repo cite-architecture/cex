@@ -53,7 +53,7 @@ import scala.collection.mutable.Map
   /** Map of block labels to one or more data sets. */
   def blockMap : scala.collection.immutable.Map[String,Vector[String]] = {
     val blocksToContent = scala.collection.mutable.Map[String, Vector[String]]()
-    
+
     for (lns <- blocksContent if lns.size > 1) {
       if (blocksToContent.keySet.contains(lns(0))) {
         val v = blocksToContent(lns(0)) :+ lns.drop(1).mkString("\n")
@@ -86,6 +86,10 @@ import scala.collection.mutable.Map
   }
 
 
-  require ( labels.union(blocks) == labels, "Invalid block label in " + blocks)
+  require (labels.union(blocks) == labels, "Invalid block label in " + blocks)
+
+  if (blocks.contains("citedata")) {
+    require(blocks.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
+  } else {}
 
 }

@@ -116,6 +116,17 @@ URN#Caption#Rights
 urn:cite2:hmt:e3eimg:img1#Folio 1 recto, natural light#public domain
 urn:cite2:hmt:e3eimg:img2#Folio 1 verso, natural light#public domain
 
+
+#!citecatalog
+# CEX Parser does not validate *contents* of blocks, but *does* ensure
+# that there must be a catalog block if you have a citedata block ....
+
+
+collection#urn:cite2:hmt:vaimg.v1:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.v1.caption:##CC-attribution-share-alike
+
+property#urn:cite2:hmt:msA.v1.urn:#Image URN#Cite2Urn#
+property#urn:cite2:hmt:msA.v1.caption:#Caption#String#
+property#urn:cite2:hmt:msA.v1.rights:#License for binary image data#String#CC-attribution-share-alike,public domain
 """
     val cex = CexParser(citedata)
     val citedatablocks = cex.block("citedata")
@@ -125,7 +136,35 @@ urn:cite2:hmt:e3eimg:img2#Folio 1 verso, natural light#public domain
 
   }
 
-  it should "accept multiple citedata blocks in a single CEX source" in  pending
+  it should "accept multiple citedata blocks in a single CEX source" in  {
+    val src = """#!citecatalog
+collection#urn:cite2:hmt:vaimg.v1:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.v1.caption:##CC-attribution-share-alike
+
+property#urn:cite2:hmt:msA.v1.urn:#Image URN#Cite2Urn#
+property#urn:cite2:hmt:msA.v1.caption:#Caption#String#
+property#urn:cite2:hmt:msA.v1.rights:#License for binary image data#String#CC-attribution-share-alike,public domain
+"""
+    val cex = CexParser(src)
+    assert(cex.block("citecatalog").size == 1)
+
+  }
+
+  it should "throw an exception if it sees a citedata block but no citecatalog block" in {
+    val citedata = """#!citedata
+#Venetus A images
+URN#Caption#Rights
+urn:cite2:hmt:vaimg:img1#Folio 1 recto, natural light#public domain
+urn:cite2:hmt:vaimg:img1a#Folio 1 recto, detail in UV light#public domain
+"""
+    try {
+      val cex = CexParser(citedata)
+      fail("Should not have parsed citedata without catalog")
+    } catch {
+      case iae: IllegalArgumentException => assert (iae.getMessage() == "requirement failed: CITE Collection data must be documented in a citectalog block")
+      case thr: Throwable => fail("Should have thrown IllegalArgumentException: " + thr)
+
+    }
+  }
 
 
 

@@ -2,30 +2,78 @@ package edu.holycross.shot.cex
 
 import scala.scalajs.js
 import js.annotation.JSExport
-
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.Map
 
 /** A CEX parser making blocks of a CEX String available
-* as a named map of label -> data.
+* as a named map of label -> vectors of data.
 *
 * @param rawCex CEX data to parse.
 */
 @JSExport case class CexParser (rawCex: String) {
 
-  /** Array of labelled blocks of CEX strings. */
-  val rawBlocks = rawCex.split("#!")
 
-  /** Each block of data as an array of non-empty, non-comment lines. */
-  val tidyBlocks = for (b <- rawBlocks if b.split("\n").size > 1) yield {
-    val lns = b.split("\n")
-    lns.filter(_.nonEmpty).filterNot(_.startsWith("#"))
+  /** Find optional string value for cex version
+  * reported for this source.
+  */
+  def version: Option[String] = {
+    block("cexversion") match {
+      case None => None
+      case v: Option[Vector[String]] => {
+        require(v.size == 1, "Multiple cexversion blocks not allowed: found " + v.size)
+        Some(v.get(0))
+      }
+    }
   }
 
-  /** Map of block labels to data. */
-  def blockMap: Map[String,String] = {
-    val tupleArray = for (lns <- tidyBlocks if lns.size > 1) yield {
-      (lns(0) -> lns.drop(1).mkString("\n"))
+  /** Find a string value for the cex version
+  * reported for this source, or a null string if None.
+  */
+  def versionString : String = {
+    block("cexversion") match {
+      case None => ""
+      case v: Option[Vector[String]] => {
+        require(v.size == 1, "Multiple cexversion blocks not allowed: found " + v.size)
+        v.get(0)
+      }
     }
-    tupleArray.toMap
+    /*
+        val versionBlocks = cex.block("cexversion").get
+        assert (versionBlocks.size == 1)
+        assert(versionBlocks(0) == "1.0.0")
+        */
+  }
+
+  /** Vector of labelled blocks of CEX strings. */
+  def rawBlocks = rawCex.split("#!").filter(_.nonEmpty).toVector
+
+  /** Each block of data as a vector of non-empty, non-comment lines. */
+  def blocksContent: Vector[Vector[String]] = {
+    //Vector[String]()
+    val content = for (b <- rawBlocks if b.split("\n").size > 1) yield {
+      val lns = b.split("\n").toVector
+      lns.filterNot(_.startsWith("#"))
+    }
+    content
+  }
+
+
+
+  /** Map of block labels to one or more data sets. */
+  def blockMap : scala.collection.immutable.Map[String,Vector[String]] = {
+    val blocksToContent = scala.collection.mutable.Map[String, Vector[String]]()
+
+    for (lns <- blocksContent if lns.size > 1) {
+      if (blocksToContent.keySet.contains(lns(0))) {
+        val v = blocksToContent(lns(0)) :+ lns.drop(1).mkString("\n")
+
+      } else {
+        val s = lns.drop(1).mkString("\n")
+        val v = Vector( s)
+        blocksToContent += (lns(0) -> v)
+      }
+    }
+    blocksToContent.toMap
   }
 
   /** Set of block labels in this CEX library
@@ -37,7 +85,7 @@ import js.annotation.JSExport
 
   /** Find content for block label.
   */
-  def block(blockLabel: String): Option[String] = {
+  def block(blockLabel: String) = { //: Option(Vector[String]) = {
     if (blocks.contains(blockLabel)) {
       Some(blockMap(blockLabel))
     } else {

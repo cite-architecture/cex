@@ -6,9 +6,9 @@ import org.scalatest.FlatSpec
 
 /**
 */
-class CexParserSpec extends FlatSpec {
+class Cex_1_0_ParserSpec extends FlatSpec {
 
-  val tinyCex = """# This is a small CEX string.
+val tinyCex = """# This is a small CEX string.
 # It uses the pound sign for its delimiter.
 
 #!cexversion
@@ -32,13 +32,27 @@ urn:cts:citedemo:arabic.quran.v1:2.1#بِسْمِ اللَّهِ الرَّحْ�
 urn:cts:citedemo:arabic.quran.v1:2.2#ذَلِكَ الْكِتَابُ لَا رَيْبَ فِيهِ هُدًى لِلْمُتَّقِينَ
 """
 
-  "A CexParser" should "parse its source into a map of labelled blocks" in {
+  "A CexParser" should "parse its input into a map of blocks" in {
     val cex = CexParser(tinyCex)
     val expectedBlocks = 4
     assert(cex.blocks.size == expectedBlocks)
+  }
 
-    assert(cex.block("cexversion") == Some("1.0.0"))
+  it should "identify a version if provided" in {
+    val cex = CexParser(tinyCex)
+    assert(cex.versionString == "1.0.0")
+  }
 
+  it should "report an empty string if no version is defined" in {
+    val noVersion = """#!ctsdata
+urn:cts:citedemo:arabic.quran.v1:1.1#بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+urn:cts:citedemo:arabic.quran.v1:1.2#الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ
+"""
+    val cex = CexParser(noVersion)
+    assert (cex.versionString == "")
+  }
+    //assert(cex.block("cexversion") == Some()
+/*
     val expectedCatalog = Some("""urn#citationScheme#groupName#workTitle#versionLabel#exemplarLabel#online
 urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true""")
     assert (cex.block("ctscatalog") == expectedCatalog)
@@ -50,6 +64,8 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
 #!bogus
 1.0.0
 """
+
+
     try {
       val cex = CexParser(badLabel)
       fail("Should have generated assertion error.")
@@ -57,7 +73,22 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
       case err: java.lang.AssertionError => assert(true)
       case _ : Throwable => fail("Should have generated assertion error.")
     }
+    */
+
+
+
+  it should "report None when asked for a non-existent block" in {
+    val cex = CexParser(tinyCex)
+    val noBlock = cex.block("boguslabel")
+    noBlock match {
+      case None => assert(true)
+      case _ => fail("Should have received a None option")
+    }
   }
+
+  it should "accept multiple citedata blocks in a single CEX source" in pending
+
+  it should "require that citedata blocks be accompanied by a citecatalog block" in pending
 
 
 

@@ -69,8 +69,9 @@ urn:cts:citedemo:arabic.quran.v1:1.2#الْحَمْدُ لِلَّهِ رَبّ�
 urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true"""
 
     val cex = CexParser(tinyCex)
-    assert (cex.block("ctscatalog").size == 1)
-    assert (cex.block("ctscatalog")(0) == expectedCatalog)
+    val catalogV =  cex.block("ctscatalog")
+    assert (catalogV.size == 1)
+    assert (catalogV(0) == expectedCatalog)
   }
 
   it should "verify that all block labels are valid" in {
@@ -92,14 +93,12 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
 
 
 
-  it should "report None when asked for a non-existent block" in pending /*{
+  it should "return an empty Vector when asked for a non-existent block" in {
     val cex = CexParser(tinyCex)
     val noBlock = cex.block("boguslabel")
-    noBlock match {
-      case None => assert(true)
-      case _ => fail("Should have received a None option")
-    }
-  } */
+    val v =   Vector[String]()
+    assert (noBlock == v)
+  }
 
   it should "accept multiple citedata blocks in a single CEX source" in pending
 

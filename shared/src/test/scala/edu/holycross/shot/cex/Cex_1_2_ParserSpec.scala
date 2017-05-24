@@ -23,11 +23,6 @@ urn:cts:greekLit:tlg0016.tlg001.loebeng:#book/section#Herodotus#Histories#Englis
 
 urn:cts:greekLit:tlg0016.tlg001.loebeng:1.0#This is the Showing forth of the Inquiry of Herodotus of Halicarnassos, to the end that neither the deeds of men may be forgotten by lapse of time, nor the works great and marvellous, which have been produced some by Hellenes and some by Barbarians, may lose their renown; and especially that the causes may be remembered for which these waged war with one another.
 
-#!citelibrary
-name#demo
-urn#urn:cite2:cex:testcoll:hdt1node
-license#public domain
-
 #!citecatalog
 collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
@@ -61,5 +56,30 @@ urn:cts:greekLit:tlg0012.tlg001.msA:1.1#urn:cite2:cite:dseverbs.r1:illustratedBy
       case _ => fail("should have created a CexParser")
     }
   }
+
+  it should "provide basic dimensions of the library" in pending /*{
+    val cex = CexParser(tinyCex)
+    val dimm = cex.dimensions
+  }*/
+
+  it should "split raw CEX into a vector of labelled blocks" in pending
+  // rawBlocks function
+
+
+  it should "split reduce labelled blocks to labelled content lines" in pending
+  // blocksContent function, a Vector[Vector[String]]
+
+  it should "convert labelled content lines to a map" in pending
+  //blockMap function
+
+  it should "repot blocks present in this library" in pending
+  // blocks function
+
+
+  it should "find content lines for a block label" in pending
+  // block function
+  
+
+
 
 }

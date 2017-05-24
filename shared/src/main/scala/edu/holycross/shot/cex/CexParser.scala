@@ -92,4 +92,15 @@ import scala.collection.mutable.Map
     require(blocks.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
   } else {}
 
+
+
+  def dimensions = {
+    println(s"Library has ${blockMap.keySet.size} block types, with the following dimensions:")
+    for (b <- blockMap.keySet) {
+      val blockStrings = blockMap(b)
+      val blockContent =
+      println(s"  ${b}: ${blockStrings.size} blocks with " + blockStrings.size + " content lines")
+    }
+  }
+
 }

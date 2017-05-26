@@ -17,9 +17,9 @@ import scala.collection.mutable.Map
   * reported for this source.
   */
   def version: Option[String] = {
-    block("cexversion").size match {
+    blockVector("cexversion").size match {
       case 0 => None
-      case 1 =>   Some(    block("cexversion")(0))
+      case 1 =>   Some(    blockVector("cexversion")(0))
       case n: Int => throw new Exception("Only one cexversion block allowed: found " + n)
     }
   }
@@ -28,9 +28,9 @@ import scala.collection.mutable.Map
   * reported for this source, or a null string if None.
   */
   def versionString : String = {
-    block("cexversion").size match {
+    blockVector("cexversion").size match {
       case 0 => ""
-      case 1 => block("cexversion")(0)
+      case 1 => blockVector("cexversion")(0)
       case n: Int =>  throw new Exception("Only one cexversion block allowed: found " + n)
     }
   }
@@ -77,7 +77,7 @@ import scala.collection.mutable.Map
 
   /** Find content for block label.
   */
-  def block(blockLabel: String) : Vector[String] = {
+  def blockVector(blockLabel: String) : Vector[String] = {
     if (blockLabels.contains(blockLabel)) {
       blockMap(blockLabel)
     } else {

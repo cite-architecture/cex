@@ -69,7 +69,7 @@ urn:cts:citedemo:arabic.quran.v1:1.2#الْحَمْدُ لِلَّهِ رَبّ�
 urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran#Arabic. Text from http://tanzil.net. Creative Commons Attribution 3.0 License##true"""
 
     val cex = CexParser(tinyCex)
-    val catalogV =  cex.block("ctscatalog")
+    val catalogV =  cex.blockVector("ctscatalog")
     assert (catalogV.size == 1)
     assert (catalogV(0) == expectedCatalog)
   }
@@ -98,7 +98,7 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
 
   it should "return an empty Vector when asked for a non-existent block" in {
     val cex = CexParser(tinyCex)
-    val noBlock = cex.block("boguslabel")
+    val noBlock = cex.blockVector("boguslabel")
     val v =   Vector[String]()
     assert (noBlock == v)
   }
@@ -129,7 +129,7 @@ property#urn:cite2:hmt:msA.v1.caption:#Caption#String#
 property#urn:cite2:hmt:msA.v1.rights:#License for binary image data#String#CC-attribution-share-alike,public domain
 """
     val cex = CexParser(citedata)
-    val citedatablocks = cex.block("citedata")
+    val citedatablocks = cex.blockVector("citedata")
 
     assert(citedatablocks.size == 2)
 
@@ -145,7 +145,7 @@ property#urn:cite2:hmt:msA.v1.caption:#Caption#String#
 property#urn:cite2:hmt:msA.v1.rights:#License for binary image data#String#CC-attribution-share-alike,public domain
 """
     val cex = CexParser(src)
-    assert(cex.block("citecatalog").size == 1)
+    assert(cex.blockVector("citecatalog").size == 1)
 
   }
 

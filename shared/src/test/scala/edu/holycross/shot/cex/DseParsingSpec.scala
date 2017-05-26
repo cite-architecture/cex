@@ -137,7 +137,9 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
     val labelled = cex.blocksContentLines
     assert(labelled.size == 8)
 
-    val expectedLabels = Vector("citelibrary", "ctscatalog", "ctsdata", "citecatalog", "citedata", "citedata",
+    val expectedLabels = Vector(
+      "citelibrary", "ctscatalog", "ctsdata",
+      "citecatalog", "citedata", "citedata",
       "imagedata", "relations")
     val labels = labelled.map(_(0))
     assert(labels == expectedLabels)
@@ -147,14 +149,31 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 
   it should "convert labelled content lines to a map" in {
     val mapped = cex.blockMap
-  }
-  //blockMap function
+    assert(mapped.size == 7)
+    val expectedKeys = Set(
+      "citelibrary", "ctscatalog", "ctsdata", "citecatalog",
+       "citedata", "imagedata", "relations")
+    assert(mapped.keySet == expectedKeys)
 
-  it should "repot blocks present in this library" in pending
+  }
+
+
+  it should "report the set of blocks present in this library" in {
+    val blockSet = cex.blockLabels
+    assert(blockSet.size == 7)
+    val expectedBlocks = Set(
+      "citelibrary", "ctscatalog", "ctsdata", "citecatalog",
+       "citedata", "imagedata", "relations")
+    assert(blockSet == expectedBlocks)
+
+  }
   // blocks function
 
 
-  it should "find content lines for a block label" in pending
+  it should "find a vector of content blocks for a label" in {
+    val citeDataBlocks = cex.blockVector("citedata")
+    assert(citeDataBlocks.size == 2)
+  }
   // block function
 
   it should "provide basic dimensions of the library" in pending /* {

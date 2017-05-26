@@ -178,6 +178,11 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
     assert(citeDataBlocks.size == 2)
   }
 
+  it should "create a single string of content lines for a label" in {
+    val dataString = cex.blockString("citedata")
+    assert(dataString.split("\n").size == 4)
+  }
+
 
 
   it should "report version number if included" in {

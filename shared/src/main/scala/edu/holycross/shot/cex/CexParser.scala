@@ -76,6 +76,8 @@ import scala.collection.mutable.Map
 
 
   /** Find content for block label.
+  *
+  * @param blockLabel Block to look for.
   */
   def blockVector(blockLabel: String) : Vector[String] = {
     if (blockLabels.contains(blockLabel)) {
@@ -86,12 +88,14 @@ import scala.collection.mutable.Map
   }
 
 
-  require (labels.union(blockLabels) == labels, "Invalid block label in " + blockLabels)
-
-  if (blockLabels.contains("citedata")) {
-    require(blockLabels.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
-  } else {}
-
+  /** Concatenate all content lines for a block type
+  * into a single string.
+  *
+  * @param blockLabel Block to look for.
+  */
+  def blockString(blockLabel: String): String = {
+    blockVector(blockLabel).mkString("\n")
+  }
 
 
   /** Sum up counts of lines in Vector of integers.
@@ -123,4 +127,13 @@ import scala.collection.mutable.Map
       println(s"\t${k} has ${v._1} block(s) totalling ${v._2} content lines.")
     }
   }
+
+
+  // Requirements for structure of CITE library:
+  require (labels.union(blockLabels) == labels, "Invalid block label in " + blockLabels)
+
+  if (blockLabels.contains("citedata")) {
+    require(blockLabels.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
+  } else {}
+
 }

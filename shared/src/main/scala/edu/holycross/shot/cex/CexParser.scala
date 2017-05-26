@@ -17,9 +17,9 @@ import scala.collection.mutable.Map
   * reported for this source.
   */
   def version: Option[String] = {
-    block("cexversion").size match {
+    blockVector("cexversion").size match {
       case 0 => None
-      case 1 =>   Some(    block("cexversion")(0))
+      case 1 =>   Some(    blockVector("cexversion")(0))
       case n: Int => throw new Exception("Only one cexversion block allowed: found " + n)
     }
   }
@@ -28,9 +28,9 @@ import scala.collection.mutable.Map
   * reported for this source, or a null string if None.
   */
   def versionString : String = {
-    block("cexversion").size match {
+    blockVector("cexversion").size match {
       case 0 => ""
-      case 1 => block("cexversion")(0)
+      case 1 => blockVector("cexversion")(0)
       case n: Int =>  throw new Exception("Only one cexversion block allowed: found " + n)
     }
   }
@@ -40,12 +40,12 @@ import scala.collection.mutable.Map
   def rawBlocks = rawCex.split("#!").filter(_.nonEmpty).toVector
 
   /** Each block of data as a vector of non-empty, non-comment lines. */
-  def blocksContent: Vector[Vector[String]] = {
+  def blocksContentLines: Vector[Vector[String]] = {
     val content = for (b <- rawBlocks if b.split("\n").size > 1) yield {
       val lns = b.split("\n").toVector
-      lns.filterNot(_.startsWith("#"))
+      lns.filterNot(_.startsWith("#")).filter(_.nonEmpty)
     }
-    content
+    content.filter(_.nonEmpty)
   }
 
 
@@ -54,7 +54,7 @@ import scala.collection.mutable.Map
   def blockMap : scala.collection.immutable.Map[String,Vector[String]] = {
     val blocksToContent = scala.collection.mutable.Map[String, Vector[String]]()
 
-    for (lns <- blocksContent if lns.size > 1) {
+    for (lns <- blocksContentLines) {
       if (blocksToContent.keySet.contains(lns(0))) {
         val v = blocksToContent(lns(0)) :+ lns.drop(1).mkString("\n")
         blocksToContent(lns(0)) = v
@@ -70,15 +70,15 @@ import scala.collection.mutable.Map
 
   /** Set of block labels in this CEX library
   */
-  val blocks: Set[String] = {
+  val blockLabels: Set[String] = {
     blockMap.keySet
   }
 
 
   /** Find content for block label.
   */
-  def block(blockLabel: String) : Vector[String] = {
-    if (blocks.contains(blockLabel)) {
+  def blockVector(blockLabel: String) : Vector[String] = {
+    if (blockLabels.contains(blockLabel)) {
       blockMap(blockLabel)
     } else {
       Vector[String]()
@@ -86,21 +86,41 @@ import scala.collection.mutable.Map
   }
 
 
-  require (labels.union(blocks) == labels, "Invalid block label in " + blocks)
+  require (labels.union(blockLabels) == labels, "Invalid block label in " + blockLabels)
 
-  if (blocks.contains("citedata")) {
-    require(blocks.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
+  if (blockLabels.contains("citedata")) {
+    require(blockLabels.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
   } else {}
 
 
 
-  def dimensions = {
-    println(s"Library has ${blockMap.keySet.size} block types, with the following dimensions:")
-    for (b <- blockMap.keySet) {
-      val blockStrings = blockMap(b)
-      val blockContent =
-      println(s"  ${b}: ${blockStrings.size} blocks with " + blockStrings.size + " content lines")
+  /** Sum up counts of lines in Vector of integers.
+  *
+  * @param counts Vector of line counts.
+  */
+  def sum(counts: Vector[Int]): Int =
+    if (counts.isEmpty) throw new IllegalArgumentException("sum of empty list")
+    else if (counts.tail.isEmpty) counts.head
+    else counts.head + sum(counts.tail)
+
+  /** Report number of blocks and total number of lines for each block type.
+  */
+  def dimensions : scala.collection.immutable.Map[String,(Int, Int)] = {
+
+    val tupleSet = for (b <- blockMap.keySet)  yield {
+      val blockCount = blockMap(b).size
+      val lineCounts =  for (s <- blockMap(b)) yield {
+        s.split("\n").size
+      }
+      (b,blockCount, sum(lineCounts))
     }
+    tupleSet.map{ case (s,i1,i2) => (s -> (i1,i2)) }.toMap
   }
 
+  def printDimensions: Unit = {
+    println(s"Library has ${blockMap.keySet.size} block types, with the following dimensions:")
+    for ( (k,v) <- dimensions) {
+      println(s"\t${k} has ${v._1} block(s) totalling ${v._2} content lines.")
+    }
+  }
 }

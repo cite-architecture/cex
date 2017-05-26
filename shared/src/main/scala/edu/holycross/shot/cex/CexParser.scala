@@ -40,12 +40,12 @@ import scala.collection.mutable.Map
   def rawBlocks = rawCex.split("#!").filter(_.nonEmpty).toVector
 
   /** Each block of data as a vector of non-empty, non-comment lines. */
-  def blocksContent: Vector[Vector[String]] = {
+  def blocksContentLines: Vector[Vector[String]] = {
     val content = for (b <- rawBlocks if b.split("\n").size > 1) yield {
       val lns = b.split("\n").toVector
-      lns.filterNot(_.startsWith("#"))
+      lns.filterNot(_.startsWith("#")).filter(_.nonEmpty)
     }
-    content
+    content.filter(_.nonEmpty)
   }
 
 
@@ -54,7 +54,7 @@ import scala.collection.mutable.Map
   def blockMap : scala.collection.immutable.Map[String,Vector[String]] = {
     val blocksToContent = scala.collection.mutable.Map[String, Vector[String]]()
 
-    for (lns <- blocksContent if lns.size > 1) {
+    for (lns <- blocksContentLines) {
       if (blocksToContent.keySet.contains(lns(0))) {
         val v = blocksToContent(lns(0)) :+ lns.drop(1).mkString("\n")
         blocksToContent(lns(0)) = v
@@ -70,7 +70,7 @@ import scala.collection.mutable.Map
 
   /** Set of block labels in this CEX library
   */
-  val blocks: Set[String] = {
+  val blockLabels: Set[String] = {
     blockMap.keySet
   }
 
@@ -78,7 +78,7 @@ import scala.collection.mutable.Map
   /** Find content for block label.
   */
   def block(blockLabel: String) : Vector[String] = {
-    if (blocks.contains(blockLabel)) {
+    if (blockLabels.contains(blockLabel)) {
       blockMap(blockLabel)
     } else {
       Vector[String]()
@@ -86,10 +86,10 @@ import scala.collection.mutable.Map
   }
 
 
-  require (labels.union(blocks) == labels, "Invalid block label in " + blocks)
+  require (labels.union(blockLabels) == labels, "Invalid block label in " + blockLabels)
 
-  if (blocks.contains("citedata")) {
-    require(blocks.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
+  if (blockLabels.contains("citedata")) {
+    require(blockLabels.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
   } else {}
 
 

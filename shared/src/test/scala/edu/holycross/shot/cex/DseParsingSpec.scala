@@ -117,29 +117,37 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 
 """
 
-
-
-  "A 1.2 CexParser" should "create parser for DSE model data" in {
-    val cex = CexParser(dseSrc)
+  val cex = CexParser(dseSrc)
+  "A 1.2 CexParser" should "create a parser for DSE model data" in {
     cex match {
       case cparser : CexParser => assert(true)
       case _ => fail("should have created a CexParser")
     }
   }
 
-  it should "provide basic dimensions of the library" in pending /*{
-    val cex = CexParser(tinyCex)
-    val dimm = cex.dimensions
-  }*/
-
-  it should "split raw CEX into a vector of labelled blocks" in pending
-  // rawBlocks function
 
 
-  it should "split reduce labelled blocks to labelled content lines" in pending
-  // blocksContent function, a Vector[Vector[String]]
+  it should "split raw CEX content into a vector of labelled blocks" in {
+    assert(cex.rawBlocks.size == 9)
+  }
 
-  it should "convert labelled content lines to a map" in pending
+
+
+  it should "split reduce labelled blocks to labelled content lines" in {
+    val labelled = cex.blocksContentLines
+    assert(labelled.size == 8)
+
+    val expectedLabels = Vector("citelibrary", "ctscatalog", "ctsdata", "citecatalog", "citedata", "citedata",
+      "imagedata", "relations")
+    val labels = labelled.map(_(0))
+    assert(labels == expectedLabels)
+
+  }
+
+
+  it should "convert labelled content lines to a map" in {
+    val mapped = cex.blockMap
+  }
   //blockMap function
 
   it should "repot blocks present in this library" in pending
@@ -149,7 +157,13 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
   it should "find content lines for a block label" in pending
   // block function
 
+  it should "provide basic dimensions of the library" in pending /* {
+    val cex = CexParser(dseSrc)
+    val dimm = cex.dimensions
+  }*/
 
+  it should "report version number if included" in pending
+  it should "do something clever if version number is requested but none present" in pending
 
 
 }

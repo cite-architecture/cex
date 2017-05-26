@@ -35,7 +35,7 @@ urn:cts:citedemo:arabic.quran.v1:2.2#ذَلِكَ الْكِتَابُ لَا ر
   "A CexParser" should "parse its input into a map of blocks" in {
     val cex = CexParser(tinyCex)
     val expectedBlocks = 4
-    assert(cex.blocks.size == expectedBlocks)
+    assert(cex.blockLabels.size == expectedBlocks)
   }
 
   it should "identify a version if provided" in {

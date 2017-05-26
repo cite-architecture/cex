@@ -94,13 +94,33 @@ import scala.collection.mutable.Map
 
 
 
-  def dimensions = {
-    println(s"Library has ${blockMap.keySet.size} block types, with the following dimensions:")
-    for (b <- blockMap.keySet) {
-      val blockStrings = blockMap(b)
-      val blockContent =
-      println(s"  ${b}: ${blockStrings.size} blocks with " + blockStrings.size + " content lines")
+  /** Sum up counts of lines in Vector of integers.
+  *
+  * @param counts Vector of line counts.
+  */
+  def sum(counts: Vector[Int]): Int =
+    if (counts.isEmpty) throw new IllegalArgumentException("sum of empty list")
+    else if (counts.tail.isEmpty) counts.head
+    else counts.head + sum(counts.tail)
+
+  /** Report number of blocks and total number of lines for each block type.
+  */
+  def dimensions : scala.collection.immutable.Map[String,(Int, Int)] = {
+
+    val tupleSet = for (b <- blockMap.keySet)  yield {
+      val blockCount = blockMap(b).size
+      val lineCounts =  for (s <- blockMap(b)) yield {
+        s.split("\n").size
+      }
+      (b,blockCount, sum(lineCounts))
     }
+    tupleSet.map{ case (s,i1,i2) => (s -> (i1,i2)) }.toMap
   }
 
+  def printDimensions: Unit = {
+    println(s"Library has ${blockMap.keySet.size} block types, with the following dimensions:")
+    for ( (k,v) <- dimensions) {
+      println(s"\t${k} has ${v._1} block(s) totalling ${v._2} content lines.")
+    }
+  }
 }

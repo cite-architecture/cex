@@ -17,6 +17,11 @@ class DseParsingSpec extends FlatSpec {
 #
 ###########################################################################
 
+#!cexversion
+#
+# Version 1.2 supports all content blocks needed to implement the DSE model.
+1.2
+
 #!citelibrary
 name#Demo of DSE structure: Venetus A manuscript, folio 12 recto
 urn#urn:cite2:dse:demo.2017a:va12r
@@ -128,16 +133,16 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 
 
   it should "split raw CEX content into a vector of labelled blocks" in {
-    assert(cex.rawBlocks.size == 9)
+    assert(cex.rawBlocks.size == 10)
   }
 
 
 
   it should "split reduce labelled blocks to labelled content lines" in {
     val labelled = cex.blocksContentLines
-    assert(labelled.size == 8)
+    assert(labelled.size == 9)
 
-    val expectedLabels = Vector(
+    val expectedLabels = Vector( "cexversion",
       "citelibrary", "ctscatalog", "ctsdata",
       "citecatalog", "citedata", "citedata",
       "imagedata", "relations")
@@ -149,8 +154,8 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 
   it should "convert labelled content lines to a map" in {
     val mapped = cex.blockMap
-    assert(mapped.size == 7)
-    val expectedKeys = Set(
+    assert(mapped.size == 8)
+    val expectedKeys = Set( "cexversion",
       "citelibrary", "ctscatalog", "ctsdata", "citecatalog",
        "citedata", "imagedata", "relations")
     assert(mapped.keySet == expectedKeys)
@@ -160,29 +165,45 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 
   it should "report the set of blocks present in this library" in {
     val blockSet = cex.blockLabels
-    assert(blockSet.size == 7)
-    val expectedBlocks = Set(
+    assert(blockSet.size == 8)
+    val expectedBlocks = Set("cexversion",
       "citelibrary", "ctscatalog", "ctsdata", "citecatalog",
        "citedata", "imagedata", "relations")
     assert(blockSet == expectedBlocks)
 
   }
-  // blocks function
-
 
   it should "find a vector of content blocks for a label" in {
     val citeDataBlocks = cex.blockVector("citedata")
     assert(citeDataBlocks.size == 2)
   }
-  // block function
 
-  it should "provide basic dimensions of the library" in pending /* {
-    val cex = CexParser(dseSrc)
+
+
+  it should "report version number if included" in {
+    assert (cex.versionString == "1.2")
+    assert(cex.version == Some("1.2"))
+  }
+  it should "report none if version is requested but none present" in {
+    val veryTiny = """
+# Empty CITE library: CEX source with only a single
+# citelibrary block, and no version indicated.
+#
+#!citelibrary
+name#Demo of tiny CEX file with no version indicated
+urn#urn:cite2:dse:demo.2017a:noversion
+license#public domain
+"""
+    val tiny = CexParser(veryTiny)
+    assert(tiny.version == None)
+  }
+
+  it should "provide basic dimensions of the library" in  {
     val dimm = cex.dimensions
-  }*/
+    assert(dimm.size == 8)
+  }
 
-  it should "report version number if included" in pending
-  it should "do something clever if version number is requested but none present" in pending
-
-
+  it should "have a function for pretty-printing dimensions" in {
+    cex.printDimensions
+  }
 }

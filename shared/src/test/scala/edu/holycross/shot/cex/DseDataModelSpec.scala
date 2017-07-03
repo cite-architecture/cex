@@ -6,21 +6,21 @@ import org.scalatest.FlatSpec
 
 /**
 */
-class DseParsingSpec extends FlatSpec {
+class DseDataModelSpec extends FlatSpec {
 
   val dseSrc = """
-//#ABOUT THIS FILE##########################################################
+//ABOUT THIS FILE////////////////////////////////////////////////
 //
 // This file is in CEX format (https://github.com/cite-architecture/citedx).
 // It contains a complete DSE model of one line of the
 // *Iliad* in the Venetus A manuscript.
 //
-//##########################################################################
+/////////////////////////////////////////////////////////////////
 
 #!cexversion
-//
-// Version 1.2 supports all content blocks needed to implement the DSE model.
-1.2
+///
+// Version 3.0 supports all content blocks needed to implement the DSE model.
+3.0
 
 #!citelibrary
 name#Demo of DSE structure: Venetus A manuscript, folio 12 recto
@@ -45,9 +45,10 @@ urn:cts:greekLit:tlg0012.tlg001.msA:1.1#Μῆνιν ἄειδε θεὰ Πηλη
 
 #!citecatalog
 //
-// There are two required collections in the DSE model:
+// There are three required collections in the DSE model:
 // 1. a collection of text-bearing surfaces
 // 2. a collection of documentary images
+// 3. the catalog of DSE relations
 //
 
 // Text-bearing surfaces:
@@ -71,8 +72,8 @@ property#urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
 
 #!citedata
 //
-//Data block for the collection of text-bearing surfaces.
-//This demo includes a single manuscript page.
+// Data block for the collection of text-bearing surfaces.
+// This demo includes a single manuscript page.
 //
 siglum#sequence#urn#rv#label#codex
 msA#1#urn:cite2:hmt:msA.v1:12r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 12 recto#urn:cite2:hmt:codex:msA
@@ -104,7 +105,7 @@ urn:cite2:hmt:vaimg.2017a:#local string string#./#urn:cite2:hmt:vaimg.2017a.righ
 // In this CEX block, each of those relations is expressed with
 // a pair of SVO statements, using either the inverse pair of verbs
 // "urn:cite2:cite:dseverbs.2017a:appearsOnhasOnIt"/urn:cite2:cite:dseverbs.2017a:appearsOn"
-// or
+# or
 // "urn:cite2:cite:dseverbs.2017a:illustrates/urn:cite2:cite:dseverbs.2017a:isIllustratedBy".
 //
 
@@ -123,7 +124,7 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 """
 
   val cex = CexParser(dseSrc)
-  "A 1.2 CexParser" should "create a parser for DSE model data" in {
+  "A 3.0 CexParser" should "create a parser for DSE model data" in {
     cex match {
       case cparser : CexParser => assert(true)
       case _ => fail("should have created a CexParser")
@@ -185,17 +186,22 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013#urn:cite2:cite:dseverbs.2017a:illustrates
 
 
 
+
   it should "report version number if included" in {
-    assert (cex.versionString == "1.2")
-    assert(cex.version == Some("1.2"))
+    println("CEX VERSIOn STRING " + cex.versionString)
+
+    assert (cex.versionString == "3.0")
+    assert(cex.version == Some("3.0"))
   }
 
-  /*
+
+
+
   it should "report none if version is requested but none present" in {
     val veryTiny = """
 // Empty CITE library: CEX source with only a single
 // citelibrary block, and no version indicated.
-/
+//
 #!citelibrary
 name#Demo of tiny CEX file with no version indicated
 urn#urn:cite2:dse:demo.2017a:noversion
@@ -204,7 +210,7 @@ license#public domain
     val tiny = CexParser(veryTiny)
     assert(tiny.version == None)
   }
-*/
+
   it should "provide basic dimensions of the library" in  {
     val dimm = cex.dimensions
     assert(dimm.size == 8)

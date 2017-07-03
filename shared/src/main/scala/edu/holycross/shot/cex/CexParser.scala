@@ -43,7 +43,7 @@ import scala.collection.mutable.Map
   def blocksContentLines: Vector[Vector[String]] = {
     val content = for (b <- rawBlocks if b.split("\n").size > 1) yield {
       val lns = b.split("\n").toVector
-      lns.filterNot(_.startsWith("#")).filter(_.nonEmpty)
+      lns.filterNot(_.startsWith("//")).filter(_.nonEmpty)
     }
     content.filter(_.nonEmpty)
   }

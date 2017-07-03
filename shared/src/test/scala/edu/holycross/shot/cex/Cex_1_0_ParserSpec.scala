@@ -8,8 +8,8 @@ import org.scalatest.FlatSpec
 */
 class Cex_1_0_ParserSpec extends FlatSpec {
 
-val tinyCex = """# This is a small CEX string.
-# It uses the pound sign for its delimiter.
+val tinyCex = """// This is a small CEX string.
+// It uses the pound sign for its delimiter.
 
 #!cexversion
 1.0.0
@@ -75,8 +75,8 @@ urn:cts:citedemo:arabic.quran.v1:#surah/ayah#Classical Arabic examples#The Quran
   }
 
   it should "verify that all block labels are valid" in {
-    val badLabel = """# This is a small CEX string.
-# It uses an invalid label.
+    val badLabel = """// This is a small CEX string.
+// It uses an invalid label.
 #!bogus
 1.0.0
 """

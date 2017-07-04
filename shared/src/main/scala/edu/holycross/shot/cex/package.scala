@@ -8,10 +8,12 @@ package object cex {
     "ctsdata",
     "ctscatalog",
     "citedata",
-    "citecatalog",
+    "citecollections",
+    "citeproperties",
     "imagedata",
     "relations",
-    "orca"
+    "datamodels"
+
   )
 
 }

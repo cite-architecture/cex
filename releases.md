@@ -1,5 +1,8 @@
 # `cex`: release notes
 
+**6.0.0**:  breaking API changes to be compatible with CEX specification of `citeproperties` and `citecollections`.
+
+**5.0.1**: fixes a bug in recognizing `datamodels` block.
 
 **5.0.0**: breaking API changes to be compatible with CEX specification 3.0.
 

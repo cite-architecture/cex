@@ -130,10 +130,13 @@ import scala.collection.mutable.Map
 
 
   // Requirements for structure of CITE library:
-  require (labels.union(blockLabels) == labels, "Invalid block label in " + blockLabels)
+  val invalid = blockLabels diff labels
+  require (labels.union(blockLabels) == labels, "CEX parser: invalid block label(s) " + invalid)
 
   if (blockLabels.contains("citedata")) {
-    require(blockLabels.contains("citecatalog"), "CITE Collection data must be documented in a citectalog block")
+    require(blockLabels.contains("citecollections"), "CITE Collection data must be documented in a citecollections block")
+    require(blockLabels.contains("citeproperties"), "CITE Collection data must be documented in a citeproperties block")
+
   } else {}
 
 }

@@ -13,8 +13,7 @@ class DseParsingSpec extends FlatSpec {
 //ABOUT THIS FILE////////////////////////////////////////////////
 //
 // This file is in CEX format (https://github.com/cite-architecture/citedx).
-// It contains a complete DSE model of one line of the
-// *Iliad* in the Venetus A manuscript.
+// It documents one line of the *Iliad* in the Venetus A manuscript.
 //
 /////////////////////////////////////////////////////////////////
 #!cexversion

@@ -1,7 +1,8 @@
 package edu.holycross.shot.cex
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
+
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.Map
 
@@ -10,7 +11,7 @@ import scala.collection.mutable.Map
 *
 * @param rawCex CEX data to parse.
 */
-@JSExport case class CexParser (rawCex: String) {
+@JSExportAll case class CexParser (rawCex: String) {
 
 
   /** Find optional string value for cex version

@@ -1,0 +1,26 @@
+
+
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            CEX parsing library
+tagline:          'Parse collections of citable data in structured formats'
+description:      ''
+
+
+baseurl: '/cex/'
+
+
+author:
+  name:           'Neel Smith'
+
+
+links:
+  - title:  CITE Architecture
+    url:  https://github.com/cite-architecture
+    external: true
+  - title:  Github repository
+    url:  https://github.com/cite-architecture/cex
+    external: true

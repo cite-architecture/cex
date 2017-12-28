@@ -4,6 +4,12 @@ title: Quick start
 ---
 
 
+## Purpose
+
+The `cex` library is primarily intended to simplify access to CEX data for other code libraries, rather than end users.  For most purposes, you can use CEX-formatted data directly from higher-level libraries, like the [`ohco2` library for working with citable texts](https://github.com/cite-architecture/ohco2).
+
+If you need to parse CEX data directly, however, you can use the `cex` library to get access to specific blocks of a CEX source.
+
 ## Parse CEX data
 
 Import the package:

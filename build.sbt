@@ -22,10 +22,17 @@ lazy val crossed = crossProject.in(file(".")).
       resolvers += Resolver.jcenterRepo,
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
-        "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
+        "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
+
+        // need for tutorial example only:
+        "edu.holycross.shot" %%% "ohco2" % "10.4.0"
+
       )
+
     ).
     jvmSettings(
+      tutTargetDirectory := file("docs"),
+      tutSourceDirectory := file("shared/src/main/tut")
 
     ).
     jsSettings(
@@ -34,5 +41,7 @@ lazy val crossed = crossProject.in(file(".")).
 
     )
 
-lazy val crossedJVM = crossed.jvm
+
+
+lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
 lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)

@@ -8,13 +8,13 @@ title: Quick start
 
 Import the package:
 
-```scala
+```tut:silent
 import edu.holycross.shot.cex._
 ```
 
 Parse a `String`of CEX data:
 
-```scala
+```tut:silent
 val cexStr = """
 #!cexversion
 3.0
@@ -27,7 +27,7 @@ val cex = CexParser(cexStr)
 
 In the JVM environment, you can parse a file:
 
-```scala
+```tut:silent
 val cex = CexParserSource.fromFile("shared/src/test/resources/sample.cex")
 ```
 
@@ -38,7 +38,7 @@ val cex = CexParserSource.fromFile("shared/src/test/resources/sample.cex")
 Map CEX block labels to `Vector`s of one or
 more string data sets, and get the string content of a specified block type:
 
-```scala
+```tut:silent
 val blockMap = cex.blockMap
 val ctsCatalog = cex.blockString("ctscatalog")
 val ctsData = cex.blockString("ctsdata")
@@ -50,7 +50,7 @@ val ctsData = cex.blockString("ctsdata")
 At this point, you could work with individual blocks of the CEX source using appropriate libraries for particular kinds of citable data.  For example, you can create a repository of canonically citable texts directly from CEX content containing a `ctscatalog` and `ctsdata` block.
 
 
-```scala
+```tut:silent
 import edu.holycross.shot.ohco2._
 
 val concatenated  = "#!ctscatalog\n" + ctsCatalog + "\n#!ctsdata\n"  + ctsData

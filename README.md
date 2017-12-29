@@ -2,7 +2,9 @@
 
 ## What it is
 
-`cex` is a cross-platform library for working with data in CITE Exchange format.
+`cex` is a cross-platform library for working with data in CITE Exchange format (CEX).
+
+(See the CEX specification at <https://cite-architecture.github.io/citedx/>.)
 
 ## Current version: 6.1.0
 

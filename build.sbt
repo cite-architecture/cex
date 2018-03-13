@@ -1,9 +1,8 @@
 name := "CITE Exchange library"
 
-crossScalaVersions := Seq("2.10.6","2.11.8", "2.12.3")
+crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
+scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
-
-scalaVersion := "2.12.3"
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
@@ -17,15 +16,15 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "cex",
       organization := "edu.holycross.shot",
-      version := "6.1.0",
+      version := "6.2.0",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       resolvers += Resolver.jcenterRepo,
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
-        "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
+        "org.scalatest" %%% "scalatest" % "3.0.1" % "test"//,
 
         // need for tutorial example only:
-        "edu.holycross.shot" %%% "ohco2" % "10.4.0"
+        //"edu.holycross.shot" %%% "ohco2" % "10.5.3"
 
       )
 
@@ -38,10 +37,7 @@ lazy val crossed = crossProject.in(file(".")).
     jsSettings(
       skip in packageJSDependencies := false,
       scalaJSUseMainModuleInitializer in Compile := true
-
     )
 
-
-
 lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
-lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)
+lazy val crossedJS = crossed.js

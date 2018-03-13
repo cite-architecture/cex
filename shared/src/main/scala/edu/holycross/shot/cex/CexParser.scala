@@ -95,7 +95,27 @@ import scala.collection.mutable.Map
   * @param blockLabel Block to look for.
   */
   def blockString(blockLabel: String): String = {
-    blockVector(blockLabel).mkString("\n")
+    val v = blockVector(blockLabel)
+    blockLabel match {
+      case "ctscatalog" => {
+        // keep header only in first block.
+        v.size match {
+          case 0 => ""
+          case 1 => v(0)
+          case _ => {
+            val replicatedHeaders = v.tail
+            val pureData = for (headless <- replicatedHeaders) yield {
+              val lines = headless.split("\n")
+              lines.tail.mkString("\n")
+            }
+            v.head + "\n" + pureData.mkString("\n")
+          }
+        }
+      }
+      case _ => v.mkString("\n")
+    }
+
+
   }
 
 

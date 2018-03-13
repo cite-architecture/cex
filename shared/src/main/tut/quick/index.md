@@ -34,10 +34,8 @@ val cex = CexParser(cexStr)
 In the JVM environment, you can parse a file:
 
 ```tut:silent
-val cex = CexParserSource.fromFile("shared/src/test/resources/sample.cex")
+val cex = CexParserSource.fromFile("jvm/src/test/resources/sample.cex")
 ```
-
-
 
 ## Working with parsed data
 
@@ -56,12 +54,10 @@ val ctsData = cex.blockString("ctsdata")
 At this point, you could work with individual blocks of the CEX source using appropriate libraries for particular kinds of citable data.  For example, you can create a repository of canonically citable texts directly from CEX content containing a `ctscatalog` and `ctsdata` block.
 
 
-```tut:silent
-import edu.holycross.shot.ohco2._
 
-val concatenated  = "#!ctscatalog\n" + ctsCatalog + "\n#!ctsdata\n"  + ctsData
+    import edu.holycross.shot.ohco2._
+    val concatenated  = "#!ctscatalog\n" + ctsCatalog + "\n#!ctsdata\n"  + ctsData
+    val textRepository = TextRepository(concatenated)
 
-val textRepository = TextRepository(concatenated)
-```
 
 See the documentation for the [`ohco2` library](https://cite-architecture.github.io/ohco2/).

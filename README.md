@@ -6,7 +6,7 @@
 
 (See the CEX specification at <https://cite-architecture.github.io/citedx/>.)
 
-## Current version: 6.3.2
+## Current version: 6.3.3
 
 
 Status:  **early development**. [Release notes](releases.md)

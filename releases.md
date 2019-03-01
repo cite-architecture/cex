@@ -1,5 +1,8 @@
 # `cex`: release notes
 
+**6.3.3**:  really, truly made sbt work with current cross publication
+
+
 **6.3.2**:  correct cross-version publication
 
 **6.3.1**:  correct error in cross-version publication

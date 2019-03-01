@@ -1,5 +1,11 @@
 # `cex`: release notes
 
+**6.3.2**:  correct cross-version publication
+
+**6.3.1**:  correct error in cross-version publication
+
+**6.3.0**:  adds `DataCollector` object.
+
 **6.2.1**: fixes a bug parsing CEX source with multiple `ctscatalog` blocks.
 
 **6.2.0**: add support for cross building in JVM and JS for Scala 2.10, 2.11 and 2.12.

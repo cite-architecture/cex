@@ -1,6 +1,6 @@
 name := "CITE Exchange library"
 
-crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
+crossScalaVersions in ThisBuild := Seq("2.10.6", "2.11.8", "2.12.4")
 scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
 
@@ -16,12 +16,13 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "cex",
       organization := "edu.holycross.shot",
-      version := "6.2.1",
+      version := "6.3.2",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       resolvers += Resolver.jcenterRepo,
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
         "org.scalatest" %%% "scalatest" % "3.0.1" % "test"
+
       )
     ).
     jvmSettings(

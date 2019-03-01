@@ -115,7 +115,7 @@ urn:cite2:cite2:datamodels.2017a:dse#DSE model#Diplomatic Scholarly Edition (DSE
     val expectedLabels = Vector(
       "cexversion", "citelibrary", "ctscatalog", "ctsdata", "citecollections", "citeproperties", "citedata", "citedata", "citedata", "datamodels")
     val labels = labelled.map(_(0))
-    assert(labels == expectedLabels)
+    assert(labels.toSet == expectedLabels.toSet)
 
   }
 

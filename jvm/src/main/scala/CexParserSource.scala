@@ -3,10 +3,14 @@ package edu.holycross.shot.cex
 import scala.io.Source
 
 
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
+
 /** Factory for creating [[CexParser]]s for CEX data
 * accessible from JVM-specific sources.
 */
-object CexParserSource {
+object CexParserSource extends LogSupport {
 
 
   /** Create a [[CexParser]] for data in a file

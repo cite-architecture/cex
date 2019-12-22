@@ -3,10 +3,13 @@ package edu.holycross.shot.cex
 import java.io.File
 import scala.io.Source
 
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
 
 /** Utility objectn
 */
-object DataCollector {
+object DataCollector extends LogSupport {
 
 
 
@@ -14,7 +17,9 @@ object DataCollector {
 
   def filesInDir(dir: File, extension: String): Vector[File] = {
     if (! dir.exists) {
-      throw new Exception("DataCollector: no directory " + dir + " found.")
+      val msg = "DataCollector: no directory " + dir + " found."
+      warn(msg)
+      throw new Exception(msg)
     } else {
       val fileVector = dir.listFiles.filter(_.isFile).toVector
       fileVector.filter(_.getName.endsWith(extension)).sorted

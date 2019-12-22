@@ -3,6 +3,11 @@ package edu.holycross.shot.cex
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
+
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
+
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.mutable.Map
 

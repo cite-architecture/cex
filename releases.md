@@ -1,5 +1,8 @@
 # `cex`: release notes
 
+
+**6.4.0**: add logging with airframe framework.
+
 **6.3.3**:  really, truly made sbt work with current cross publication
 
 

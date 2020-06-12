@@ -1,5 +1,6 @@
 # `cex`: release notes
 
+**6.5.0**: support build with sbt 1.3.0.
 
 **6.4.0**: add logging with airframe framework.
 

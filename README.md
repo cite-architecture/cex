@@ -6,7 +6,7 @@
 
 (See the CEX specification at <https://cite-architecture.github.io/citedx/>.)
 
-## Current version: 6.5.0
+## Current version: 6.5.1
 
 
 Status:  **early development**. [Release notes](releases.md)
@@ -23,9 +23,9 @@ Status:  **early development**. [Release notes](releases.md)
 
 ## Using, building, testing
 
-`cex` is compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 and 2.12.  Binaries for all platforms are available from jcenter.  If you are using sbt, include `Resolver.jcenterRepo`in your list of resolvers
+`cex` is compiled for both the JVM and ScalaJS using scala versions 2.10, 2.11 and 2.12. Binaries for all three versions are available from the Nexus repository on <terracotta.hpcc.uh.edu/nexus>.
 
-    resolvers += Resolver.jcenterRepo
+    resolvers += "Nexus" at "https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/"
 
 and  add this to your library dependencies:
 

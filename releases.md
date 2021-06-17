@@ -1,5 +1,7 @@
 # `cex`: release notes
 
+**6.5.1**: Artifact published now at https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/
+
 **6.5.0**: support build with sbt 1.3.0.
 
 **6.4.0**: add logging with airframe framework.
